@@ -22,6 +22,23 @@ export class HeroService {
       .catch(this.handleError);
   }
 
+  update(hero: Hero): Promise<Hero> {
+    const url = `${this.heroesUrl}/${hero.id}`;
+    return this.http
+      .put(url, JSON.stringify(hero), {headers: this.headers})
+      .toPromise()
+      .then(() => hero)         // why no parameters?
+      .catch(this.handleError);
+  }
+
+  delete(id: number):Promise<void> {
+    const url = `${this.heroesUrl}/${id}`;
+    return this.http.delete(url, {headers: this.headers})
+      .toPromise()
+      .then(() => null)         // why no parameters?
+      .catch(this.handleError);
+  }
+
   getHeroes(): Promise<Hero[]> {
     return this.http.get(this.heroesUrl)
                .toPromise()
@@ -40,15 +57,6 @@ export class HeroService {
   private handleError(error: any): Promise<any> {
     console.error('An error occured', error);
     return Promise.reject(error.mesage || error);
-  }
-
-  update(hero: Hero): Promise<Hero> {
-    const url = `${this.heroesUrl}/${hero.id}`;
-    return this.http
-      .put(url, JSON.stringify(hero), {headers: this.headers})
-      .toPromise()
-      .then(() => hero)
-      .catch(this.handleError);
   }
 
   // TODO ?!
